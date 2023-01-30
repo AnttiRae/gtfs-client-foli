@@ -26,6 +26,7 @@ if DEBUG:
 else:
     ALLOWED_HOSTS = ['*']  # production domain goes here
 
+API_BASE_URL = 'http://data.foli.fi/gtfs/v0/20230119-163758'
 
 # Application definition
 
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bus',
 ]
 
 MIDDLEWARE = [
