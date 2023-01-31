@@ -2,6 +2,7 @@ env
 .idea
 local_settings.py
 __pycache__# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+.vscode
 
 # dependencies
 /node_modules

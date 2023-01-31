@@ -1,29 +1,23 @@
 import StopSearch from './components/StopSearch'
-import stopService from './services/stop';
+import SingleStop from './components/SingleStop'
+
 import {
     BrowserRouter as Router,
     Routes, Route
 } from "react-router-dom"
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
     const [currentStop, setCurrentStop] = useState({})
-    const [stops, setStops] = useState({})
 
-    useEffect(() => {
-        stopService
-            .getStops()
-            .then(stops => {
-                setStops(stops)
-            })
-    }, [])
 
     return (
         <div>
             <Router>
                 <Routes>
-                    <Route path="/" element={<StopSearch currentStop={currentStop} />} />
+                    <Route path="/" element={<StopSearch currentStop={currentStop} setCurrentStop={setCurrentStop} />} />
+                    <Route path="/stop" element={<SingleStop currentStop={currentStop} />} />
                 </Routes>
             </Router>
         </div>
