@@ -60,7 +60,7 @@ const StopSearch = ({ currentStop, setCurrentStop}) => {
             <div>
                 <ul>
                     {stops.slice(0, 5).map((stop) =>
-                    <a onClick={() => {SelectStop(stop.stop_code)}} key={stop.stop_code} >
+                    <a onClick={() => {SelectStop(stop)}} key={stop.stop_code} >
                         <StopTile stopName={stop.stop_name} stopNumber={stop.stop_code}  />
                     </a>
                     )}

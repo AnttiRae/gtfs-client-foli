@@ -1,8 +1,8 @@
 import axios from 'axios'
-const baseUrl = 'http://data.foli.fi/gtfs/v0/20230119-163758/stops'
+const baseUrl = 'http://data.foli.fi/gtfs/stops'
 
 const getStops = () => {
-    const request = axios.get('http://data.foli.fi/gtfs/v0/20230119-163758/stops')
+    const request = axios.get(baseUrl)
     return request.then(respose => respose.data)
 }
 

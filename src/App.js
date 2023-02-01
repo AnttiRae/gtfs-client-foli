@@ -1,15 +1,23 @@
 import StopSearch from './components/StopSearch'
 import SingleStop from './components/SingleStop'
-
+import calendarDatesService from "./services/calendarDates";
 import {
     BrowserRouter as Router,
     Routes, Route
 } from "react-router-dom"
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
     const [currentStop, setCurrentStop] = useState({})
+    const [calendarDates, setCalendarDates] = useState({})
+
+    useEffect(() => {
+        calendarDatesService.getCalendarDates()
+            .then((calendarDates) => {
+                setCalendarDates(calendarDates)
+            })
+    }, [])
 
 
     return (
@@ -17,7 +25,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path="/" element={<StopSearch currentStop={currentStop} setCurrentStop={setCurrentStop} />} />
-                    <Route path="/stop" element={<SingleStop currentStop={currentStop} />} />
+                    <Route path="/stop" element={<SingleStop currentStop={currentStop} calendarDates={calendarDates} />} />
                 </Routes>
             </Router>
         </div>
