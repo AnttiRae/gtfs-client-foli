@@ -3,8 +3,6 @@ import stopService from '../services/stop';
 import { useEffect, useState } from 'react';
 
 
-// import stoptimesservice
-
 const StopSearch = ({ currentStop, setCurrentStop}) => {
     const navigate = useNavigate()
 
@@ -38,35 +36,37 @@ const StopSearch = ({ currentStop, setCurrentStop}) => {
     const handleStopNumberSubmit = (event) => {
         event.preventDefault()
         if (stops[currentSearch] === undefined) {
-            console.log("stop not found")
         } else {
             setCurrentStop(stops[currentSearch])
-            console.log(currentStop)
         }
     }
 
     const StopTile = ({ stopName, stopNumber }) => {
         return (
-            <li>
-                <h1>{ stopName }</h1>
-                <h2>{ stopNumber }</h2>
-            </li>
+            <div className="stop-tile">
+                <p>{ stopName }</p>
+                <p>{ stopNumber }</p>
+            </div>
         )
     }
 
     const StopListing = ({ stops }) => {
 
-        return (
-            <div>
-                <ul>
-                    {stops.slice(0, 5).map((stop) =>
-                    <a onClick={() => {SelectStop(stop)}} key={stop.stop_code} >
+        if (Object.keys(stops).length > 0) {
+            return (
+                <div>
+                    <div className="stop-tile">
+                        <p>Stop Name</p>
+                        <p>Stop Number</p>
+                    </div>
+                    {stops.slice(0, 20).map((stop) =>
+                    <a className="stop-link" onClick={() => {SelectStop(stop)}} key={stop.stop_code} >
                         <StopTile stopName={stop.stop_name} stopNumber={stop.stop_code}  />
                     </a>
                     )}
-                </ul>
-            </div>
-        )
+                </div>
+            )
+        }
     }
 
     const SelectStop = (stop) => {
@@ -77,12 +77,10 @@ const StopSearch = ({ currentStop, setCurrentStop}) => {
     return (
         <div>
             <div className="container my-3">
-                <h2>Turku traffic</h2>
-            </div>
-            <div className="d-flex justify-content-center align-items-center stop-number-input">
+            <h2>Turku traffic</h2>
                 <div>
                     <form id="stopNumberForm" onSubmit={handleStopNumberSubmit} >
-                        <p>Bus Stop Number</p>
+                        <p>Enter a bus stop number below:</p>
                         <input onChange={handleStopNumberChange} />
                     </form>
                 </div>

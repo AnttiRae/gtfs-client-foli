@@ -1,24 +1,39 @@
 import { useNavigate } from "react-router-dom";
 import stopTimesService from '../services/stopTimes';
-import tripService from '../services/trip';
+import routesService from '../services/routes'
 import { useEffect, useState } from 'react';
 
 const StopInfo = ({ stop }) => {
     return (
-        <div>
-            <p>Bus Stop: {stop.stop_code} - {stop.stop_name}</p>
+        <div className="text-center my-5">
+            <h3>Bus Stop: {stop.stop_code} - {stop.stop_name}</h3>
         </div>
     )
 }
 
-const StopTimesList = ({ stopTimes, calendarDates }) => {
+const StopTimesList = ({ stopTimes, calendarDates, trips }) => {
+    const [routes, setRoutes] = useState([])
+
+    useEffect(() =>{
+        routesService.getRoutes()
+            .then(routes => {
+                return setRoutes(routes);
+            })
+    }, [routes])
+
+
     if (Object.keys(stopTimes).length > 0) {
         return (
-            <div>
-                {stopTimes.map(time => 
-                    <StopTimesInfo stopTime={time} calendarDates={calendarDates} />
+            <ul>
+                <li>
+                    <p>Line</p>
+                    <p>Departure Time</p>
+                    <p>Headsign</p>
+                </li>
+                {stopTimes.map((time, index) => 
+                    <StopTimesInfo stopTime={time} calendarDates={calendarDates} routes={routes} key={index} trips={trips}/>
                 )}
-            </div>
+            </ul>
         )
     } else {
         return (
@@ -30,34 +45,40 @@ const StopTimesList = ({ stopTimes, calendarDates }) => {
 
 }
 
-const StopTimesInfo = ({ stopTime, calendarDates }) => {
-    const [trip, setTrip] = useState({})
+const StopTimesInfo = ({ stopTime, calendarDates, routes, trips }) => {
 
-    useEffect(() => {
-        tripService.getTrip(stopTime.trip_id)
-            .then(trip => setTrip(trip[0]))
-    }, [])
+    const findTrip = (tripID) => {
+        return trips.find(e => {
+            return e.trip_id === tripID
+        })
+    }
+
+    const trip = findTrip(stopTime.trip_id)
 
     const drivingToday = () => {
-        const today = new Date(Date.now()).toLocaleString('af-ZA', {year: 'numeric', month: '2-digit', day: '2-digit'}).split(', ')[0].replaceAll('-', '') 
+        const today = new Date(Date.now()).toLocaleString('af-ZA', {year: 'numeric', month: '2-digit', day: '2-digit'}).split(', ')[0].replaceAll('-', '')
         return calendarDates[trip.block_id].find(e => e.date === today)
-
     }
-    if (Object.keys(trip).length > 0) {
-        if (drivingToday()) {
-            return (
-                <div>
-                    <p>{stopTime.departure_time}</p>
-                    <p>{trip.trip_headsign}</p>
-                    <br></br>
-                </div>
-            )
-        }
+
+    const routeShortName = (routeID) => {
+        return routes.find(e => {
+            return e.route_id === routeID
+        }).route_short_name
+    }
+
+    if (drivingToday()) {
+        return (
+            <li>
+                <p>{routeShortName(trip.route_id)}</p>
+                <p>{stopTime.departure_time.slice(0, -3)}</p>
+                <p>{trip.trip_headsign}</p>
+            </li>
+        )
     }
 }
 
 
-const SingleStop = ({ currentStop, calendarDates }) => {
+const SingleStop = ({ currentStop, calendarDates, trips }) => {
     const navigate = useNavigate()
 
     const [stopTimes, setStopTimes] = useState({})
@@ -80,7 +101,7 @@ const SingleStop = ({ currentStop, calendarDates }) => {
     return (
         <div>
             <StopInfo stop={currentStop} />
-            <StopTimesList stopTimes={stopTimes} calendarDates={calendarDates} />
+            <StopTimesList stopTimes={stopTimes} calendarDates={calendarDates} trips={trips} />
         </div>
     )
 }

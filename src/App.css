@@ -1,0 +1,38 @@
+li {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+
+li p {
+    padding-left: 10px;
+    min-width: 25%;
+    flex-grow: 1;
+}
+
+li p:nth-child(-n+2) {
+    flex-grow: 0;
+}
+
+li:nth-child(even) {background: #CCC}
+
+
+.stop-link {
+    text-decoration: none;
+    color: black;
+}
+
+.stop-link:hover{
+    cursor: pointer;
+}
+
+.stop-tile {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.stop-tile p {
+    min-width: 25%;
+}
